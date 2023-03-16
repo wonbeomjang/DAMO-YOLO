@@ -1,6 +1,16 @@
 [English](README.md) | 简体中文
 
-<div align="center"><img src="assets/logo.png" width="1500"></div>
+<div align="center"><img src="assets/logo.png" width="1500">
+
+![](https://img.shields.io/badge/language-python-blue.svg)
+![](https://img.shields.io/badge/license-Apache-000000.svg)
+![Contributing](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+[![README](https://shields.io/badge/README-English-blue)](README.md)
+[![ThirdParty](https://img.shields.io/badge/ThirdParty--Resources-brightgreen)](#third-parry-resources)
+[![IndustryModels](https://img.shields.io/badge/Industry--Models-orange)](#industry-application-models)
+
+</div>
+
 
 ## 简介
 <div align="center"><img src="assets/overview.gif" width="1500"></div>
@@ -10,11 +20,14 @@
 <div align="center"><img src="assets/curve.png" width="500"></div>
 
 ## 更新日志
+- **![new](https://img.alicdn.com/imgextra/i4/O1CN01kUiDtl1HVxN6G56vN_!!6000000000764-2-tps-43-19.png) [2023/03/13: DAMO-YOLO v0.3.0更新!]**
+    * 开源面向端上的DAMO-YOLO-Nano模型，仅用3.0GFLops在COCO数据集上达到35.1的mAP，在X86-CPU Intel 8163上测得的FPS为286。
+    * 更新升级了optimizer builder，现在通过编辑config文件中的optimizer，即可使用任意一款Pytorch支持的优化器进行训练。
 - **[2023/02/15: 第三届无人机检测竞赛基准。]**
     * 欢迎大家参加CVPR2023举办的[第三届无人机检测竞赛](https://anti-uav.github.io/Evaluate/)。比赛提供了基于DAMO-YOLO框架训练的基准模型，[DamoYolo_Anti-UAV-23_S](https://modelscope.cn/models/damo/cv_tinynas_uav-detection_damoyolo/summary)和[DamoYolo_Anti-UAV-23_L](https://modelscope.cn/models/damo/cv_tinynas_uav-detection_damoyolo-l/summary)，方便参赛选手使用。
 - **[2023/01/07: DAMO-YOLO v0.2.1更新!]**
     * 增加[TensorRT Int8部分量化教程](./tools/partial_quantization/README.md)，实现19%提速仅损失0.3%精度。
-    * 增加[通用demo工具](#快速上手)，支持TensorRT/Onnx/Torch引擎实现视频/图像推理。
+    * 增加[通用demo工具](#快速上手)，支持TensorRT/Onnx/Torch引擎实现视频/图像/摄像头推理。
     * 基于ModelScope增加[工业应用模型](#industry-application-models)，包括[人体检测](https://www.modelscope.cn/models/damo/cv_tinynas_human-detection_damoyolo/summary), [安全帽检测](https://www.modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo_safety-helmet/summary)，[口罩检测](https://www.modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo_facemask/summary)和[香烟检测](https://www.modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo_cigarette/summary)。
     * 增加[第三方资源](#第三方资源)板块，收集汇总第三方内容，目前包括[DAMO-YOLO代码解读](https://blog.csdn.net/jyyqqq/article/details/128419143), [DAMO-YOLO自有数据训练范例](https://blog.csdn.net/Cwhgn/article/details/128447380?spm=1001.2014.3001.5501)。 
 -  **[2022/11/27: DAMO-YOLO v0.1.1更新!]**
@@ -28,6 +41,7 @@
 - 线上Demo已整合至ModelScope，快去[DAMO-YOLO-T](https://www.modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo-t/summary)，[DAMO-YOLO-S](https://modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo/summary)，[DAMO-YOLO-M](https://www.modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo-m/summary) 体验一下吧！**ModelScope正免费提供GPU资源，并已支持DAMO-YOLO训练，快去试试吧！**
 
 ## 模型库
+### 通用模型
 |Model |size |mAP<sup>val<br>0.5:0.95 | Latency T4<br>TRT-FP16-BS1| FLOPs<br>(G)| Params<br>(M)| Download |
 | ------        |:---: | :---:     |:---:|:---: | :---: | :---:|
 |[DAMO-YOLO-T](./configs/damoyolo_tinynasL20_T.py) | 640 | 41.8  | 2.78  | 18.1  | 8.5  |[torch](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/clean_models/before_distill/damoyolo_tinynasL20_T_418.pth),[onnx](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/onnx/before_distill/damoyolo_tinynasL20_T_418.onnx)  |
@@ -38,8 +52,18 @@
 |[DAMO-YOLO-M*](./configs/damoyolo_tinynasL35_M.py) | 640 | 50.0  | 5.62  | 61.8  | 28.2 |[torch](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/clean_models/damoyolo_tinynasL35_M.pth),[onnx](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/onnx/damoyolo_tinynasL35_M.onnx)|
 
 - 上表中汇报的是COCO2017 val集上的结果, 测试时使用multi-class NMS。
-- 其中latency中不包括后处理时间。
+- 其中latency中不包括后处理时间（NMS）。
 - \* 表示模型训练时使用蒸馏。
+
+### 端上模型
+|Model |size |mAP<sup>val<br>0.5:0.95 | Latency(ms) CPU<br> MNN-Intel-8163| FLOPs<br>(G)| Params<br>(M)| AliYun Download | Google Download|
+| ------        |:---: | :---:     |:---:|:---: | :---: | :---:| :---:|
+| [DAMO-YOLO-N](./configs/damoyolo_tinynasL20_N.py)| 416 | 35.1 | 3.5 | 3.0 | 2.2 | [torch](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/clean_models/before_distill/damoyolo_tinynasL20_N_351.pth),[onnx](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/onnx/before_distill/damoyolo_tinynasL20_N_351.onnx) | -- |
+
+- 上表中汇报的是COCO2017 val集上的结果, 测试时使用multi-class NMS。
+- 其中latency中不包括后处理时间。
+- X86-CPU的latency测试基于[MNN-2.4.0](https://github.com/alibaba/MNN)。
+
 
 ## 快速上手
 
@@ -70,17 +94,17 @@ pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonA
 
 步骤一. 从模型库中下载训练好的torch模型，onnx或tensorRt推理引擎，例如damoyolo_tinynasL25_S.pth，damoyolo_tinynasL25_S.onnx或damoyolo_tinynasL25_S.trt
 
-步骤二. 执行命令时用-f选项指定配置(config)文件，--engine指定推理引擎，--engine_type指定推理引擎类型，--path指定推理输入数据（支持图片和视频）。具体命令如下:
+步骤二. 执行命令时用-f选项指定配置(config)文件，--engine指定推理引擎，--path指定推理输入数据（支持图片和视频）, --camid指定摄像头（仅在输入类型为camera时生效）。具体命令如下:
 ```shell
-# torch 推理
-python tools/demo.py -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.pth --engine_type torch --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
+# torch 图像推理
+python tools/demo.py image -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.pth --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
 
-# onnx 推理
-python tools/demo.py -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.onnx --engine_type onnx --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
+# onnx 视频推理
+python tools/demo.py video -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.onnx --conf 0.6 --infer_size 640 640 --device cuda --path your_video.mp4
 
-# tensorRT 推理
+# tensorRT 摄像头推理
 
-python tools/demo.py -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.trt --engine_type tensorRT --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
+python tools/demo.py camera -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.trt --conf 0.6 --infer_size 640 640 --device cuda --camid 0
 ```
 
 </details>
@@ -199,10 +223,10 @@ python tools/trt_eval.py -f configs/damoyolo_tinynasL25_S.py -trt deploy/damoyol
 步骤三：使用已经导出的onnx或TensorRT引擎进行目标检测。
 ```shell
 # onnx 推理
-python tools/demo.py -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.onnx --engine_type onnx --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
+python tools/demo.py image -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.onnx --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
 
 # trt 推理
-python tools/demo.py -f ./configs/damoyolo_tinynasL25_S.py --engine ./deploy/damoyolo_tinynasL25_S_end2end_fp16_bs1.trt --engine_type tensorRT --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg --end2end
+python tools/demo.py image -f ./configs/damoyolo_tinynasL25_S.py --engine ./deploy/damoyolo_tinynasL25_S_end2end_fp16_bs1.trt --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg --end2end
 ```
 </details>
 

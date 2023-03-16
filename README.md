@@ -1,6 +1,15 @@
 English | [简体中文](README_cn.md)
 
-<div align="center"><img src="assets/logo.png" width="1500"></div>
+<div align="center"><img src="assets/logo.png" width="1500">
+
+![](https://img.shields.io/badge/language-python-blue.svg)
+![](https://img.shields.io/badge/license-Apache-000000.svg)
+![Contributing](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+[![README-cn](https://shields.io/badge/README-%E4%B8%AD%E6%96%87-blue)](README_cn.md)
+[![ThirdParty](https://img.shields.io/badge/ThirdParty--Resources-brightgreen)](#third-parry-resources)
+[![IndustryModels](https://img.shields.io/badge/Industry--Models-orange)](#industry-application-models)
+
+</div>
 
 ## Introduction
 <div align="center"><img src="assets/overview.gif" width="1500"></div>
@@ -10,11 +19,14 @@ Welcome to **DAMO-YOLO**! It is a fast and accurate object detection method, whi
 <div align="center"><img src="assets/curve.png" width="500"></div>
 
 ## Updates
+- **![new](https://img.alicdn.com/imgextra/i4/O1CN01kUiDtl1HVxN6G56vN_!!6000000000764-2-tps-43-19.png) [2023/03/13: We release DAMO-YOLO v0.3.0!]**
+    * Release DAMO-YOLO-Nano, which achieves 286fps on x86 cpu, possesses 35.1 mAP with only 3.02GFlops.
+    * Update the optimizer builder, edits the optimizer config, you are able to use any optimizer supported by Pytorch.
 - **[2023/02/15: Baseline for The 3rd Anti-UAV Challenge.]**
     * Welcome to join [the 3rd Anti-UAV Challenge](https://anti-uav.github.io/Evaluate/) on CVPR2023. The Challenge provides baseline models trained by DAMO-YOLO, which can be found on [DamoYolo_Anti-UAV-23_S](https://modelscope.cn/models/damo/cv_tinynas_uav-detection_damoyolo/summary) and [DamoYolo_Anti-UAV-23_L](https://modelscope.cn/models/damo/cv_tinynas_uav-detection_damoyolo-l/summary).
 - **[2023/01/07: We release DAMO-YOLO v0.2.1!]**
     * Add [TensorRT Int8 Quantization Tutorial](./tools/partial_quantization/README.md), achieves 19% speed up with only 0.3% accuracy loss.
-    * Add [general demo tools](#quick-start), support TensorRT/Onnx/Torch based vidoe/image inference.
+    * Add [general demo tools](#quick-start), support TensorRT/Onnx/Torch based vidoe/image/camera inference.
     * Add more [industry application models](#industry-application-models), including [human detection](https://www.modelscope.cn/models/damo/cv_tinynas_human-detection_damoyolo/summary), [helmet detection](https://www.modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo_safety-helmet/summary), [facemask detection](https://www.modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo_facemask/summary) and [cigarette detection](https://www.modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo_cigarette/summary).
     * Add [third-party resources](#third-party-resources), including [DAMO-YOLO Code Interpretation](https://blog.csdn.net/jyyqqq/article/details/128419143), [Practical Example for Finetuning on Custom Dataset](https://blog.csdn.net/Cwhgn/article/details/128447380?spm=1001.2014.3001.5501). 
 - **[2022/12/15: We release  DAMO-YOLO v0.1.1!]**
@@ -28,6 +40,7 @@ Welcome to **DAMO-YOLO**! It is a fast and accurate object detection method, whi
 - [DAMO-YOLO-T](https://www.modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo-t/summary), [DAMO-YOLO-S](https://modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo/summary), [DAMO-YOLO-M](https://www.modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo-m/summary) is integrated into ModelScope. Training is supported on [ModelScope](https://www.modelscope.cn/models/damo/cv_tinynas_object-detection_damoyolo/summary) now! **Come and try DAMO-YOLO with free GPU resources provided by ModelScope.** 
 
 ## Model Zoo
+### General Models
 |Model |size |mAP<sup>val<br>0.5:0.95 | Latency T4<br>TRT-FP16-BS1| FLOPs<br>(G)| Params<br>(M)| AliYun Download | Google Download|
 | ------        |:---: | :---:     |:---:|:---: | :---: | :---:| :---:|
 |[DAMO-YOLO-T](./configs/damoyolo_tinynasL20_T.py) | 640 | 41.8  | 2.78  | 18.1  | 8.5  |[torch](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/clean_models/before_distill/damoyolo_tinynasL20_T_418.pth),[onnx](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/onnx/before_distill/damoyolo_tinynasL20_T_418.onnx)|[torch](https://drive.google.com/file/d/1-9NzCRKJZs3ea_n35seEYSpq3M_RkhcT/view?usp=sharing),[onnx](https://drive.google.com/file/d/1-7s8fqK5KC8z4sXCuh3N900chMtMSYri/view?usp=sharing)|
@@ -38,8 +51,19 @@ Welcome to **DAMO-YOLO**! It is a fast and accurate object detection method, whi
 |[DAMO-YOLO-M*](./configs/damoyolo_tinynasL35_M.py) | 640 | 50.0  | 5.62  | 61.8  | 28.2 |[torch](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/clean_models/damoyolo_tinynasL35_M.pth),[onnx](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/onnx/damoyolo_tinynasL35_M.onnx)|[torch](https://drive.google.com/file/d/1-RoKaO7U9U1UrweJb7c4Hs_S_qKFDExc/view?usp=sharing),[onnx](https://drive.google.com/file/d/1-HRkLfGoFBjdQDiWudsS1zxicx53Pu5m/view?usp=sharing)|
 
 - We report the mAP of models on COCO2017 validation set, with multi-class NMS.
-- The latency in this table is measured without post-processing.
+- The latency in this table is measured without post-processing(NMS).
 - \* denotes the model trained with distillation.
+
+
+### Light Models
+|Model |size |mAP<sup>val<br>0.5:0.95 | Latency(ms) CPU<br> MNN-Intel-8163| FLOPs<br>(G)| Params<br>(M)| AliYun Download | Google Download|
+| ------        |:---: | :---:     |:---:|:---: | :---: | :---:| :---:|
+| [DAMO-YOLO-N](./configs/damoyolo_tinynasL20_N.py)| 416 | 35.1 | 3.5 | 3.0 | 2.2 | [torch](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/clean_models/before_distill/damoyolo_tinynasL20_N_351.pth),[onnx](https://idstcv.oss-cn-zhangjiakou.aliyuncs.com/DAMO-YOLO/onnx/before_distill/damoyolo_tinynasL20_N_351.onnx) | -- |
+
+- We report the mAP of models on COCO2017 validation set, with multi-class NMS.
+- The latency in this table is measured without post-processing(NMS).
+- The latency is evaluated based on [MNN-2.4.0](https://github.com/alibaba/MNN).
+
 
 ## Quick Start
 
@@ -70,16 +94,16 @@ pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonA
 
 Step1. Download a pretrained torch, onnx or tensorRT engine from the benchmark table, e.g., damoyolo_tinynasL25_S.pth, damoyolo_tinynasL25_S.onnx, damoyolo_tinynasL25_S.trt.
 
-Step2. Use -f(config filename) to specify your detector's config, --path to specify input data path, image or video are supported. For example:
+Step2. Use -f(config filename) to specify your detector's config, --path to specify input data path, image/video/camera are supported. For example:
 ```shell
-# torch
-python tools/demo.py -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.pth --engine_type torch --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
+# torch engine with image
+python tools/demo.py image -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.pth --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
 
-# onnx
-python tools/demo.py -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.onnx --engine_type onnx --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
+# onnx engine with video
+python tools/demo.py video -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.onnx --conf 0.6 --infer_size 640 640 --device cuda --path your_video.mp4
 
-# tensorRT
-python tools/demo.py -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.trt --engine_type tensorRT --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
+# tensorRT engine with camera
+python tools/demo.py camera -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.trt --conf 0.6 --infer_size 640 640 --device cuda --camid 0
 ```
 
 </details>
@@ -196,10 +220,10 @@ python tools/trt_eval.py -f configs/damoyolo_tinynasL25_S.py -trt deploy/damoyol
 Step.3 onnx or trt engine inference demo and appoint test image/video by --path. end2end means to using trt_with_nms to inference.
 ```shell
 # onnx inference
-python tools/demo.py -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.onnx --engine_type onnx --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
+python tools/demo.py image -f ./configs/damoyolo_tinynasL25_S.py --engine ./damoyolo_tinynasL25_S.onnx --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg
 
 # trt inference
-python tools/demo.py -f ./configs/damoyolo_tinynasL25_S.py --engine ./deploy/damoyolo_tinynasL25_S_end2end_fp16_bs1.trt --engine_type tensorRT --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg --end2end
+python tools/demo.py image -f ./configs/damoyolo_tinynasL25_S.py --engine ./deploy/damoyolo_tinynasL25_S_end2end_fp16_bs1.trt --conf 0.6 --infer_size 640 640 --device cuda --path ./assets/dog.jpg --end2end
 ```
 </details>
 
