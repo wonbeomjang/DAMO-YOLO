@@ -15,48 +15,59 @@ class Config(MyConfig):
         self.miscs.ckpt_interval_epochs = 10
         # optimizer
         self.train.batch_size = 256
-        self.train.base_lr_per_img = 0.01 / 64
+        self.train.base_lr_per_img = 0.001 / 64
         self.train.min_lr_ratio = 0.05
-        self.train.weight_decay = 5e-4
-        self.train.momentum = 0.9
         self.train.no_aug_epochs = 16
         self.train.warmup_epochs = 5
 
+        self.train.optimizer = {
+            'name': "AdamW",
+            'weight_decay': 1e-2,
+            'lr': 4e-3,
+            }
+
         # augment
-        self.train.augment.transform.image_max_range = (640, 640)
+        self.train.augment.transform.image_max_range = (416, 416)
+        self.train.augment.transform.keep_ratio = False
+        self.test.augment.transform.keep_ratio = False
+        self.test.augment.transform.image_max_range = (416, 416)
         self.train.augment.mosaic_mixup.mixup_prob = 0.15
         self.train.augment.mosaic_mixup.degrees = 10.0
         self.train.augment.mosaic_mixup.translate = 0.2
-        self.train.augment.mosaic_mixup.shear = 2.0
-        self.train.augment.mosaic_mixup.mosaic_scale = (0.1, 2.0)
+        self.train.augment.mosaic_mixup.shear = 0.2
+        self.train.augment.mosaic_mixup.mosaic_scale = (0.75, 1.25)
+        self.train.augment.mosaic_mixup.keep_ratio = False
 
         self.dataset.train_ann = ('coco_2017_train', )
         self.dataset.val_ann = ('coco_2017_val', )
 
         # backbone
         structure = self.read_structure(
-            './damo/base_models/backbones/nas_backbones/tinynas_L35_kxkx.txt')
+            './damo/base_models/backbones/nas_backbones/tinynas_nano_small.txt')
         TinyNAS = {
-            'name': 'TinyNAS_csp',
+            'name': 'TinyNAS_mob',
             'net_structure_str': structure,
-            'out_indices': (2, 3, 4),
+            'out_indices': (2, 4, 5),
             'with_spp': True,
-            'use_focus': True,
+            'use_focus': False,
             'act': 'silu',
-            'reparam': True,
+            'reparam': False,
+            'depthwise': True,
+            'use_se': False,
         }
 
         self.model.backbone = TinyNAS
 
         GiraffeNeckV2 = {
             'name': 'GiraffeNeckV2',
-            'depth': 1.5,
-            'hidden_ratio': 1.0,
-            'in_channels': [128, 256, 512],
-            'out_channels': [128, 256, 512],
+            'depth': 0.50,
+            'hidden_ratio': 0.5, # 0.5
+            'in_channels': [40, 80, 160],
+            'out_channels': [40, 80, 160],
             'act': 'silu',
             'spp': False,
             'block_name': 'BasicBlock_3x3_Reverse',
+            'depthwise': True,
         }
 
         self.model.neck = GiraffeNeckV2
@@ -64,13 +75,14 @@ class Config(MyConfig):
         ZeroHead = {
             'name': 'ZeroHead',
             'num_classes': 80,
-            'in_channels': [128, 256, 512],
+            'in_channels': [40, 80, 160],
             'stacked_convs': 0,
-            'reg_max': 16,
+            'reg_max': 7,
             'act': 'silu',
-            'nms_conf_thre': 0.05,
-            'nms_iou_thre': 0.7,
+            'nms_conf_thre': 0.03,
+            'nms_iou_thre': 0.65,
             'legacy': False,
+            'last_kernel_size': 1,
         }
         self.model.head = ZeroHead
 

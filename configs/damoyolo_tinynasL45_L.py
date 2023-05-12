@@ -35,7 +35,7 @@ class Config(MyConfig):
 
         # backbone
         structure = self.read_structure(
-            './damo/base_models/backbones/nas_backbones/tinynas_L35_kxkx.txt')
+            './damo/base_models/backbones/nas_backbones/tinynas_L45_kxkx.txt')
         TinyNAS = {
             'name': 'TinyNAS_csp',
             'net_structure_str': structure,
@@ -50,7 +50,7 @@ class Config(MyConfig):
 
         GiraffeNeckV2 = {
             'name': 'GiraffeNeckV2',
-            'depth': 1.5,
+            'depth': 2.0,
             'hidden_ratio': 1.0,
             'in_channels': [128, 256, 512],
             'out_channels': [128, 256, 512],
